@@ -24,7 +24,7 @@ export const POST = async (req: NextRequest) => {
   try {
     const body: SearchJobBody = await req.json();
 
-    let andFilters = [] as Array<JobWhereInput>;
+    const andFilters = [] as Array<JobWhereInput>;
 
     if (body.title?.trim()) {
       andFilters.push({
