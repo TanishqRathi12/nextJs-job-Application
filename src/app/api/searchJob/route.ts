@@ -8,11 +8,23 @@ interface SearchJobBody {
   salary?: string | number;
 }
 
+interface JobWhereInput {
+  job_title?: {
+    contains: string;
+    mode: "insensitive";
+  };
+  job_location?: string;
+  job_is_remote?: boolean;
+  job_salary?: {
+    gte: number;
+  };
+}
+
 export const POST = async (req: NextRequest) => {
   try {
     const body: SearchJobBody = await req.json();
 
-    const andFilters: any[] = [];
+    let andFilters = [] as Array<JobWhereInput>;
 
     if (body.title?.trim()) {
       andFilters.push({
@@ -62,8 +74,7 @@ export const POST = async (req: NextRequest) => {
       },
     });
     return NextResponse.json({ success: true, jobs });
-  } catch (error) {
-    console.error("Search job error:", error);
+  } catch {
     return NextResponse.json(
       { success: false, message: "Something went wrong" },
       { status: 500 }
