@@ -1,5 +1,11 @@
 import CompanyReviewSection from "@/components/reviewSection";
 import Link from "next/link";
+import Image from "next/image";
+
+interface PageProp {
+  params: { id: string };
+}
+
 
 const jobDetail = async (id: string) => {
   try {
@@ -15,7 +21,7 @@ const jobDetail = async (id: string) => {
   }
 };
 
-const Page = async ({ params }: { params: { id: string } }) => {
+const page = async ({ params }: PageProp) => {
   const { job, company } = (await jobDetail(params.id)) || {
     job: {},
     company: {},
@@ -58,9 +64,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
             </p>
           </div>
           {job?.job?.logo && (
-            <img
+            <Image
               src={job?.job?.logo}
-              alt="Company Logo"
+              alt={"Company Logo"}
+              width={80}
+              height={80}
               className="w-20 h-20 object-contain rounded"
             />
           )}
@@ -108,4 +116,4 @@ const Page = async ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default Page;
+export default page;

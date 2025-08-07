@@ -21,8 +21,7 @@ type Review = {
   comment: string;
   createdAt: string;
 };
-
-export default function CompanyDetailPage() {
+export const Page = () => {
   const [company, setCompany] = useState<Company | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,14 +41,14 @@ export default function CompanyDetailPage() {
         } else {
           setCompany(null);
         }
-      } catch (error) {
+      } catch{
         setCompany(null);
       } finally {
         setLoading(false);
       }
     };
     fetchCompany();
-  }, []);
+  }, [setJobCreated]);
 
   if (loading) {
     return (
@@ -69,7 +68,7 @@ export default function CompanyDetailPage() {
                 No Company Found
               </h2>
               <p className="text-sm text-muted-foreground mb-4">
-                You don't have a company registered yet.
+                You don t have a company registered yet.
               </p>
               <Link href="/dashboard">
                 <Button variant="outline" className="cursor-pointer">
@@ -156,3 +155,5 @@ export default function CompanyDetailPage() {
     </div>
   );
 }
+
+export default Page;

@@ -1,16 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../prisma/client";
 
+interface SearchJobBody {
+  title?: string;
+  job_location?: string;
+  job_is_remote?: boolean;
+  salary?: string | number;
+}
+
 export const POST = async (req: NextRequest) => {
   try {
-    const body = await req.json();
-    console.log("Search request body:", body);
-    const filters: any = {
-      AND: [],
-    };
+    const body: SearchJobBody = await req.json();
 
-    if (body.title && body.title.trim() !== "") {
-      filters.AND.push({
+    const andFilters: any[] = [];
+
+    if (body.title?.trim()) {
+      andFilters.push({
         job_title: {
           contains: body.title,
           mode: "insensitive",
@@ -18,28 +23,32 @@ export const POST = async (req: NextRequest) => {
       });
     }
 
-    if (body.job_location && body.job_location.trim() !== "") {
-      filters.AND.push({
+    if (body.job_location?.trim()) {
+      andFilters.push({
         job_location: body.job_location,
       });
     }
 
     if (typeof body.job_is_remote === "boolean") {
-      filters.AND.push({
+      andFilters.push({
         job_is_remote: body.job_is_remote,
       });
     }
 
     if (body.salary) {
-      filters.AND.push({
-        job_salary: {
-          gte: parseInt(body.salary),
-        },
-      });
+      const salaryNumber = typeof body.salary === "string" ? parseInt(body.salary) : body.salary;
+      if (!isNaN(salaryNumber)) {
+        andFilters.push({
+          job_salary: {
+            gte: salaryNumber,
+          },
+        });
+      }
     }
+    const whereClause = andFilters.length > 0 ? { AND: andFilters } : {};
 
     const jobs = await prisma.job.findMany({
-      where: filters,
+      where: whereClause,
       select: {
         id: true,
         job_title: true,
@@ -52,12 +61,11 @@ export const POST = async (req: NextRequest) => {
         job_salary: true,
       },
     });
-    console.log("Jobs found:", jobs.length);
-
     return NextResponse.json({ success: true, jobs });
-  } catch (error: any) {
+  } catch (error) {
+    console.error("Search job error:", error);
     return NextResponse.json(
-      { success: false, message: "Something went wrong", error: error.message },
+      { success: false, message: "Something went wrong" },
       { status: 500 }
     );
   }

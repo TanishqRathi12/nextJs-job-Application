@@ -8,7 +8,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,7 +24,7 @@ import {
   Mail,
   Shield,
   User,
-  UserPlus
+  UserPlus,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -52,16 +52,16 @@ const Page = () => {
   };
 
   const getPasswordStrengthColor = () => {
-    if (passwordStrength < 50) return 'bg-red-500';
-    if (passwordStrength < 75) return 'bg-yellow-500';
-    return 'bg-green-500';
+    if (passwordStrength < 50) return "bg-red-500";
+    if (passwordStrength < 75) return "bg-yellow-500";
+    return "bg-green-500";
   };
 
   const getPasswordStrengthText = () => {
-    if (passwordStrength < 25) return 'Very Weak';
-    if (passwordStrength < 50) return 'Weak';
-    if (passwordStrength < 75) return 'Good';
-    return 'Strong';
+    if (passwordStrength < 25) return "Very Weak";
+    if (passwordStrength < 50) return "Weak";
+    if (passwordStrength < 75) return "Good";
+    return "Strong";
   };
 
   const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
@@ -87,7 +87,7 @@ const Page = () => {
       } else {
         setError(result.message || "Signup failed, please try again.");
       }
-    } catch (err) {
+    } catch {
       setError("Network error. Please try again.");
     } finally {
       setIsLoading(false);
@@ -105,7 +105,10 @@ const Page = () => {
       <header className="relative z-10 w-full bg-white/80 backdrop-blur-lg border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <Link href="/" className="flex items-center space-x-2 sm:space-x-4 group">
+            <Link
+              href="/"
+              className="flex items-center space-x-2 sm:space-x-4 group"
+            >
               <ArrowLeft className="w-4 sm:w-5 h-4 sm:h-5 text-gray-500 group-hover:text-blue-600 transition-colors" />
               <div className="flex items-center space-x-2">
                 <div className="w-7 sm:w-8 h-7 sm:h-8 bg-gradient-to-br from-blue-600 to-teal-600 rounded-lg flex items-center justify-center">
@@ -116,12 +119,14 @@ const Page = () => {
                 </h1>
               </div>
             </Link>
-            
+
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <span className="text-gray-600 text-xs sm:text-sm">Already have an account?</span>
+              <span className="text-gray-600 text-xs sm:text-sm">
+                Already have an account?
+              </span>
               <Link href="/login">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   className="border-blue-600 text-blue-600 hover:bg-blue-50 transition-all text-xs sm:text-sm px-3 sm:px-4"
                 >
@@ -153,7 +158,8 @@ const Page = () => {
                 Get Started
               </CardTitle>
               <CardDescription className="text-center text-gray-600 text-sm sm:text-base px-2">
-                Create your account and unlock access to thousands of job opportunities
+                Create your account and unlock access to thousands of job
+                opportunities
               </CardDescription>
             </CardHeader>
 
@@ -166,7 +172,8 @@ const Page = () => {
                       <div className="flex items-start space-x-2">
                         <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
                         <div>
-                          <strong className="font-medium">Error:</strong> {error}
+                          <strong className="font-medium">Error:</strong>{" "}
+                          {error}
                         </div>
                       </div>
                     </div>
@@ -175,7 +182,10 @@ const Page = () => {
 
                 <div className="space-y-3 sm:space-y-4">
                   <div className="space-y-1 sm:space-y-2">
-                    <Label htmlFor="name" className="text-xs sm:text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="name"
+                      className="text-xs sm:text-sm font-medium text-gray-700"
+                    >
                       Full Name
                     </Label>
                     <div className="relative">
@@ -192,7 +202,10 @@ const Page = () => {
                   </div>
 
                   <div className="space-y-1 sm:space-y-2">
-                    <Label htmlFor="email" className="text-xs sm:text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="email"
+                      className="text-xs sm:text-sm font-medium text-gray-700"
+                    >
                       Email Address
                     </Label>
                     <div className="relative">
@@ -209,7 +222,10 @@ const Page = () => {
                   </div>
 
                   <div className="space-y-1 sm:space-y-2">
-                    <Label htmlFor="password" className="text-xs sm:text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="password"
+                      className="text-xs sm:text-sm font-medium text-gray-700"
+                    >
                       Password
                     </Label>
                     <div className="relative">
@@ -238,16 +254,23 @@ const Page = () => {
                     {passwordStrength > 0 && (
                       <div className="mt-2">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-gray-600">Password strength:</span>
-                          <span className={`text-xs font-medium ${
-                            passwordStrength < 50 ? 'text-red-600' : 
-                            passwordStrength < 75 ? 'text-yellow-600' : 'text-green-600'
-                          }`}>
+                          <span className="text-xs text-gray-600">
+                            Password strength:
+                          </span>
+                          <span
+                            className={`text-xs font-medium ${
+                              passwordStrength < 50
+                                ? "text-red-600"
+                                : passwordStrength < 75
+                                ? "text-yellow-600"
+                                : "text-green-600"
+                            }`}
+                          >
                             {getPasswordStrengthText()}
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
+                          <div
                             className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthColor()}`}
                             style={{ width: `${passwordStrength}%` }}
                           ></div>
@@ -261,9 +284,12 @@ const Page = () => {
                   <div className="flex items-start space-x-3">
                     <Shield className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                     <div>
-                      <h4 className="text-sm font-medium text-blue-900 mb-1">Secure Account</h4>
+                      <h4 className="text-sm font-medium text-blue-900 mb-1">
+                        Secure Account
+                      </h4>
                       <p className="text-xs text-blue-700 leading-relaxed">
-                        Your data is encrypted and protected. We never share your information with third parties.
+                        Your data is encrypted and protected. We never share
+                        your information with third parties.
                       </p>
                     </div>
                   </div>
@@ -290,12 +316,15 @@ const Page = () => {
                 </Button>
 
                 <p className="text-xs text-gray-500 text-center px-2">
-                  By creating an account, you agree to our{' '}
+                  By creating an account, you agree to our{" "}
                   <Link href="/terms" className="text-blue-600 hover:underline">
                     Terms of Service
-                  </Link>{' '}
-                  and{' '}
-                  <Link href="/privacy" className="text-blue-600 hover:underline">
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy"
+                    className="text-blue-600 hover:underline"
+                  >
                     Privacy Policy
                   </Link>
                 </p>
@@ -306,10 +335,12 @@ const Page = () => {
                       <div className="w-full border-t border-gray-200"></div>
                     </div>
                     <div className="relative flex justify-center text-xs sm:text-sm">
-                      <span className="px-2 bg-white text-gray-500">Or continue as guest</span>
+                      <span className="px-2 bg-white text-gray-500">
+                        Or continue as guest
+                      </span>
                     </div>
                   </div>
-                  
+
                   <div className="mt-3 sm:mt-4">
                     <GuestButton />
                   </div>
@@ -322,18 +353,30 @@ const Page = () => {
           <div className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
             <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 sm:p-4">
               <CheckCircle className="w-6 h-6 text-green-600 mx-auto mb-2" />
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1">Instant Access</h3>
-              <p className="text-xs text-gray-600">Start browsing jobs immediately after signup</p>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1">
+                Instant Access
+              </h3>
+              <p className="text-xs text-gray-600">
+                Start browsing jobs immediately after signup
+              </p>
             </div>
             <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 sm:p-4">
               <Shield className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1">Secure Profile</h3>
-              <p className="text-xs text-gray-600">Your information is protected with encryption</p>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1">
+                Secure Profile
+              </h3>
+              <p className="text-xs text-gray-600">
+                Your information is protected with encryption
+              </p>
             </div>
             <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 sm:p-4">
               <Briefcase className="w-6 h-6 text-purple-600 mx-auto mb-2" />
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1">Dream Job</h3>
-              <p className="text-xs text-gray-600">Find opportunities that match your skills</p>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1">
+                Dream Job
+              </h3>
+              <p className="text-xs text-gray-600">
+                Find opportunities that match your skills
+              </p>
             </div>
           </div>
         </div>

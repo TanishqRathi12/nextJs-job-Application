@@ -1,8 +1,8 @@
 "use client";
 import Card from "@/components/Card";
-import { Job } from "@prisma/client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { Job } from "@prisma/client";
 import { useEffect, useState } from "react";
 
 const Page = () => {
@@ -15,8 +15,7 @@ const Page = () => {
         const res = await fetch(`/api/getCompanyJobs`);
         const result = await res.json();
         setData(result.jobs);
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
+      } catch {
       } finally {
         setLoading(false);
       }
@@ -54,7 +53,7 @@ const Page = () => {
         </h2>
       </div>
       <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-5 lg:mx-44 lg:my-12 mt-4">
-        {data.map((item: any) => (
+        {data.map((item: Job) => (
           <Card item={item} key={item.id} />
         ))}
       </div>

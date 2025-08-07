@@ -49,7 +49,7 @@ export const POST = async (req: NextRequest) => {
       { success: true, message: "User created successfully." },
       { status: 201 }
     );
-  } catch (error) {
+  } catch{
     return NextResponse.json(
       { success: false, message: "Internal server error." },
       { status: 500 }

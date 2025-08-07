@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { decodeToken } from "@/utils/token";
 import { prisma } from "../../../../prisma/client";
+import { Job } from "@prisma/client";
 
 interface DecodedToken {
   id: string;
@@ -10,11 +11,25 @@ interface DecodedToken {
   email: string;
 }
 
+interface JobData {
+  job_title: string;
+  job_logo: string;
+  job_publisher: string;
+  job_description: string;
+  job_employment_type: string;
+  job_is_remote: boolean;
+  job_city: string;
+  job_location: string;
+  job_salary: number;
+  user_id: string;
+  company_id?: string;
+}
+
 export const POST = async (req: NextRequest) => {
   const cookie = await cookies();
   const decoded = decodeToken(cookie.get("token")?.value || "") as DecodedToken;
   const body = await req.json();
-
+console.log(body)
   const {
     job_title,
     job_logo,
@@ -36,10 +51,10 @@ export const POST = async (req: NextRequest) => {
   })
 
   try {
-    const jobData: any = {
+    const jobData: JobData = {
       job_title,
       job_logo,
-      job_publisher:user?.Company?.name,
+      job_publisher: user?.Company?.name || "",
       job_description,
       job_employment_type,
       job_is_remote,
@@ -54,7 +69,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     const newJob = await prisma.job.create({
-      data: jobData,
+      data: jobData as Job,
     });
 
     return NextResponse.json(
@@ -62,7 +77,6 @@ export const POST = async (req: NextRequest) => {
       { status: 201 }
     );
   } catch {
-    console.error("Error creating job:");
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 };

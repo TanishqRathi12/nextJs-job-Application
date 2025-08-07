@@ -1,5 +1,5 @@
+import { NextResponse } from "next/server";
 import { prisma } from "../../../../prisma/client";
-import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
@@ -21,7 +21,7 @@ export const GET = async () => {
       jobs,
       message: "Jobs fetched Successfully",
     });
-  } catch (error) {
+  } catch{
     return NextResponse.error();
   }
 };

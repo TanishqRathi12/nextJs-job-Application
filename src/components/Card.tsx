@@ -25,12 +25,18 @@ const getPlaceholderImage = (company: string) => {
   return `https://via.placeholder.com/50/eeeeee/000000?text=${firstLetter}`;
 };
 
+interface Applicant {
+  id: string;
+  name: string;
+  email: string;
+}
+
 const Card = ({ item }: itemProp) => {
   const pathname = usePathname();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showApplicantsModal, setShowApplicantsModal] = useState(false);
-  const [applicants, setApplicants] = useState<any[]>([]);
+  const [applicants, setApplicants] = useState<Applicant[]>([]);
   const router = useRouter();
   console.log(applicants);
 
@@ -118,7 +124,7 @@ const Card = ({ item }: itemProp) => {
 
       <div className="flex items-center justify-between mt-4">
         <div className="flex items-center gap-1">
-          <Image
+          <img
             src={item.job_logo || getPlaceholderImage(item.job_publisher)}
             alt={item.job_publisher}
             width={500}
@@ -257,7 +263,7 @@ const Card = ({ item }: itemProp) => {
                         <span className="text-white font-semibold text-sm">
                           {applicant.name
                             .split(" ")
-                            .map((n: any) => n[0])
+                            .map((n: string) => n[0])
                             .join("")
                             .slice(0, 2)
                             .toUpperCase()}

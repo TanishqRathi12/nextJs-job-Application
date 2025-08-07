@@ -52,7 +52,7 @@ const Page = () => {
       } else {
         setError(result.message || "Login failed, please try again.");
       }
-    } catch (err) {
+    } catch{
       setError("Network error. Please try again.");
     } finally {
       setIsLoading(false);
@@ -236,7 +236,7 @@ const Page = () => {
 
                 <div className="text-center">
                   <p className="text-xs sm:text-sm text-gray-600">
-                    Don't have an account?{" "}
+                    Dont have an account?
                     <Link
                       href="/signup"
                       className="text-blue-600 hover:text-blue-800 font-medium hover:underline transition-colors"

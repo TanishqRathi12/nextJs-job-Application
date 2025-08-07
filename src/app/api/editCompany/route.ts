@@ -28,7 +28,7 @@ export const PATCH = async (req:NextRequest) => {
             { success: true, company: updatedCompany },
             { status: 200 }
         );
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { success: false, message: "Internal server error." },
             { status: 500 }

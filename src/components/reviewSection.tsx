@@ -2,7 +2,6 @@
 
 import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type Review = {
@@ -26,7 +25,6 @@ export default function CompanyReviewSection({
   const [message, setMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [applyLoading, setApplyLoading] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -69,7 +67,7 @@ export default function CompanyReviewSection({
           data?.message || "Failed to apply for the job. Please try again."
         );
       }
-    } catch (error) {
+    } catch {
       setMessage("An unexpected error occurred while applying.");
     } finally {
       setApplyLoading(false);

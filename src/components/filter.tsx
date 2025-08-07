@@ -17,10 +17,10 @@ interface FilterState {
 const FilterSidebar = ({
   onApplyFilter,
 }: {
-  onApplyFilter: (filters: any) => void;
+  onApplyFilter: (filters: FilterState & { title: string }) => void;
 }) => {
   const searchParams = useSearchParams();
-  const [title, setTitle] = useState(searchParams.get("title") || "");
+  const [title] = useState(searchParams.get("title") || "");
   const [filters, setFilters] = useState<FilterState>({
     job_salary: "",
     job_location: "",
@@ -31,7 +31,7 @@ const FilterSidebar = ({
     if (title) {
       onApplyFilter({ title, ...filters });
     }
-  }, []);
+  }, [title, filters, onApplyFilter]);
 
   const handleChange = (
     field: keyof FilterState,

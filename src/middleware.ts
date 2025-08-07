@@ -23,7 +23,7 @@ export const middleware = async (req: NextRequest) => {
       if (payload?.role !== "admin") {
         return NextResponse.redirect(new URL("/not-authorized", req.url));
       }
-    } catch (error) {
+    } catch{
       return NextResponse.redirect(new URL("/login", req.url));
     }
   }

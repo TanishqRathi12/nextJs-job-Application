@@ -1,7 +1,7 @@
-import { NextRequest,NextResponse } from "next/server";
-import { prisma } from "../../../../prisma/client";
-import { cookies } from "next/headers";
 import { decodeToken } from "@/utils/token";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
+import { prisma } from "../../../../prisma/client";
 
 interface DecodedToken {
     id: string;
@@ -9,7 +9,7 @@ interface DecodedToken {
     name: string;
 }
 
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
     try {
         const cookie = await cookies();
         const decoded = decodeToken(cookie.get("token")?.value || "") as DecodedToken;

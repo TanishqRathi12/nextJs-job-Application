@@ -255,7 +255,7 @@ const JobDhoondoLanding = () => {
                         ))}
                       </div>
                       <blockquote className="text-lg sm:text-xl md:text-2xl font-medium mb-6 text-gray-700">
-                        "{testimonial.content}"
+                        {testimonial.content}
                       </blockquote>
                       <div className="flex items-center justify-center">
                         <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-teal-600 rounded-full flex items-center justify-center text-white font-bold mr-4">

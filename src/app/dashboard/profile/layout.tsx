@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 import { JobProvider } from "@/context/compnay";
 
 export default function RootLayout({

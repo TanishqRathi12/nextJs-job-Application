@@ -33,7 +33,7 @@ export const GET = async () => {
       { company, reviews: company.reviews, success: true },
       { status: 200 }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { message: "Internal server error.", success: false },
       { status: 500 }

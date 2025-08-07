@@ -30,7 +30,7 @@ export const DELETE = async (req: NextRequest) => {
       where: { id },
     });
     return NextResponse.json({ message: "Job deleted successfully" });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to delete job" },
       { status: 500 }
