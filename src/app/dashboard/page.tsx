@@ -4,7 +4,7 @@ import { Job } from "@prisma/client";
 
 const getJobs = async () => {
   try {
-    const res = await fetch(`/api/getAllJobs`);
+    const res = await fetch(`${process.env.BASE_URL}/api/getAllJobs`);
     const data = await res.json()
     return data;
   } catch (err) {
