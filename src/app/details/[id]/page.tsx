@@ -8,7 +8,7 @@ const jobDetail = async (
   id: string
 ): Promise<{ job: Job; company: Company} | undefined> => {
   try {
-    const res = await fetch(`${process.env.BASE_URL}/api/detail`, {
+    const res = await fetch(`/api/detail`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
