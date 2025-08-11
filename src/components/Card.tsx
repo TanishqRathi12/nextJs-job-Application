@@ -93,16 +93,17 @@ const Card = ({ item }: itemProp) => {
           "Content-Type": "application/json",
         },
       });
-
       if (res.ok) {
         return res.json();
+      }else{
+        return { application: [] };
       }
     } catch (err) {
       console.error("Error:", err);
     }
   };
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["applicants", item.id],
     queryFn: fetchApplicants,
     enabled: showApplicantsModal,
@@ -231,11 +232,15 @@ const Card = ({ item }: itemProp) => {
                   <p className="text-sm text-gray-500 mt-1">
                     {isLoading
                       ? "Loading applications..."
-                      : `${data.application.length} ${
-                          data?.application.length === 1
+                      : isError
+                      ? "Error loading applications"
+                      : data?.application?.length > 0
+                      ? `${data.application.length} ${
+                          data.application.length === 1
                             ? "application"
                             : "applications"
-                        } received`}
+                        } received`
+                      : "No applications received"}
                   </p>
                 </div>
               </div>
@@ -274,7 +279,32 @@ const Card = ({ item }: itemProp) => {
                     information
                   </p>
                 </div>
-              ) : data.application.length > 0 ? (
+              ) : isError ? (
+                <div className="flex flex-col items-center justify-center py-16">
+                  <div className="w-20 h-20 rounded-2xl bg-red-100 flex items-center justify-center mb-6">
+                    <svg
+                      className="w-10 h-10 text-red-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M18.364 5.636l-1.414 1.414M6.343 17.657l-1.414-1.414M5.636 5.636l1.414 1.414M17.657 17.657l1.414-1.414M12 8v4m0 4h.01"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-red-800 mb-3">
+                    Error loading applications
+                  </h3>
+                  <p className="text-red-500 text-center max-w-md leading-relaxed">
+                    There was a problem fetching the applications. Please try
+                    again later.
+                  </p>
+                </div>
+              ) : data?.application?.length > 0 ? (
                 <div
                   className="overflow-y-auto px-6 py-2"
                   style={{
@@ -283,51 +313,49 @@ const Card = ({ item }: itemProp) => {
                   }}
                 >
                   <div className="space-y-3">
-                    {data.application.map(
-                      (applicant: applicantsData) => (
-                        <div
-                          key={applicant.id}
-                          className="group flex items-center space-x-4 p-4 rounded-xl bg-gray-50/50 hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-md transition-all duration-200"
-                        >
-                          <div className="relative">
-                            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0 shadow-sm">
-                              <span className="text-white font-bold text-lg">
-                                {applicant.name
-                                  .split(" ")
-                                  .map((n: string) => n[0])
-                                  .join("")
-                                  .slice(0, 2)
-                                  .toUpperCase()}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center space-x-2 mb-1">
-                              <h3 className="font-semibold text-gray-900 truncate text-lg">
-                                {applicant.name}
-                              </h3>
-                            </div>
-                            <p className="text-gray-600 truncate flex items-center space-x-1">
-                              <svg
-                                className="w-4 h-4 text-gray-400"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M3 8l7.89 7.89a2 2 0 002.82 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                                />
-                              </svg>
-                              <span>{applicant.email}</span>
-                            </p>
+                    {data.application.map((applicant: applicantsData) => (
+                      <div
+                        key={applicant.id}
+                        className="group flex items-center space-x-4 p-4 rounded-xl bg-gray-50/50 hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-md transition-all duration-200"
+                      >
+                        <div className="relative">
+                          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0 shadow-sm">
+                            <span className="text-white font-bold text-lg">
+                              {applicant.name
+                                .split(" ")
+                                .map((n: string) => n[0])
+                                .join("")
+                                .slice(0, 2)
+                                .toUpperCase()}
+                            </span>
                           </div>
                         </div>
-                      )
-                    )}
+
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <h3 className="font-semibold text-gray-900 truncate text-lg">
+                              {applicant.name}
+                            </h3>
+                          </div>
+                          <p className="text-gray-600 truncate flex items-center space-x-1">
+                            <svg
+                              className="w-4 h-4 text-gray-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M3 8l7.89 7.89a2 2 0 002.82 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                              />
+                            </svg>
+                            <span>{applicant.email}</span>
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                   <div className="h-4"></div>
                 </div>
@@ -352,15 +380,15 @@ const Card = ({ item }: itemProp) => {
                     No Applications Yet
                   </h3>
                   <p className="text-gray-500 text-center max-w-md leading-relaxed">
-                    Once candidates start applying for this position, their
-                    applications will appear here. You ll be able to review and
-                    manage all submissions from this dashboard.
+                    No application of this type has been received yet. Once
+                    candidates start applying for this position, their
+                    applications will appear here.
                   </p>
                 </div>
               )}
             </div>
 
-            {!isLoading && data.application.length > 0 && (
+            {!isLoading && !isError && data?.application?.length > 0 && (
               <div className="flex items-center justify-between p-6 pt-4 border-t border-gray-100 bg-gray-50/50">
                 <div className="text-sm text-gray-500">
                   Showing all applications
