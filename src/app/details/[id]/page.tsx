@@ -1,28 +1,41 @@
+"use client";
+import CommonError from "@/components/commonError";
+import CommonLoader from "@/components/commonLoader";
 import CompanyReviewSection from "@/components/reviewSection";
-import { Company, Job } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
-
-const jobDetail = async (
-  id: string
-): Promise<{ job: Job; company: Company} | undefined> => {
+const jobDetail = async (id: string) => {
   try {
-    const res = await fetch(`${process.env.BASE_URL}/api/detail`, {
+    const res = await fetch(`/api/detail`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
     });
-    const details = await res.json();
-    return { job: details.jobDetail, company: details.companyDetail };
+    return res.json();
   } catch (error) {
     console.log(error);
   }
 };
 
-export default async function Page({ params }: { params: Promise<{id: string}>}) {
-  const {id} = await params;
-  const {job, company } = await jobDetail(id) || { job: undefined, company: undefined };
+const Page = () => {
+  const params = useParams();
+  const id = params.id as string;
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["jobDetail", id],
+    queryFn: () => jobDetail(id),
+    enabled: !!id,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  if (isError) {
+    return <CommonError />;
+  }
+  if (isLoading) {
+    return <CommonLoader />;
+  }
   return (
     <div className="min-h-screen bg-gray-100 px-4 sm:px-6 lg:px-12 py-10">
       <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8 space-y-6">
@@ -50,19 +63,19 @@ export default async function Page({ params }: { params: Promise<{id: string}>})
         <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              {job?.job_title}
+              {data?.jobDetail.job_title}
             </h1>
             <p className="text-gray-600 mt-1 flex flex-wrap items-center gap-2">
-              <span className="font-medium">{company?.name}</span>
+              <span className="font-medium">{data?.companyDetail?.name}</span>
               <span>•</span>
-              <span>{job?.job_city}</span>
+              <span>{data?.jobDetail.job_city}</span>
               <span>•</span>
-              <span>{job?.job_location}</span>
+              <span>{data?.jobDetail.job_location}</span>
             </p>
           </div>
-          {job?.job_logo && (
+          {data?.jobDetail.job_logo && (
             <Image
-              src={job?.job_logo}
+              src={data?.jobDetail.job_logo}
               alt={"Company Logo"}
               width={80}
               height={80}
@@ -73,22 +86,22 @@ export default async function Page({ params }: { params: Promise<{id: string}>})
 
         <div className="flex flex-wrap gap-4 text-sm">
           <span className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full">
-            {job?.job_employment_type}
+            {data?.jobDetail.job_employment_type}
           </span>
           <span
             className={`px-3 py-1 rounded-full ${
-              job?.job_is_remote
+              data?.jobDetail.job_is_remote
                 ? "bg-green-100 text-green-700"
                 : "bg-blue-100 text-blue-700"
             }`}
           >
-            {job?.job_is_remote ? "Remote" : "On-site"}
+            {data?.jobDetail.job_is_remote ? "Remote" : "On-site"}
           </span>
           <span className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full">
-            Publisher: {job?.job_publisher}
+            Publisher: {data?.jobDetail.job_publisher}
           </span>
           <span className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full">
-            Posted: {new Date(job?.createdAt || "").toLocaleDateString()}
+            Posted: {new Date(data?.jobDetail.createdAt || "").toLocaleDateString()}
           </span>
         </div>
 
@@ -96,19 +109,23 @@ export default async function Page({ params }: { params: Promise<{id: string}>})
           <h2 className="text-xl font-semibold mb-2 text-gray-900">
             Job Description
           </h2>
-          <p className="text-gray-700">{job?.job_description}</p>
+          <p className="text-gray-700">{data?.jobDetail.job_description}</p>
         </section>
 
         <section>
           <h2 className="text-xl font-semibold mb-2 text-gray-900">Salary</h2>
           <p className="text-gray-700 font-medium">
-            ₹{job?.job_salary?.toLocaleString()}
+            ₹{data?.jobDetail.job_salary?.toLocaleString()}
           </p>
         </section>
         <section>
-          <CompanyReviewSection companyId={company?.id || ""} jobId={job?.id || ""} />
+          <CompanyReviewSection
+            companyId={data?.companyDetail?.id || ""}
+            jobId={data?.jobDetail.id || ""}
+          />
         </section>
       </div>
     </div>
   );
 }
+export default Page;

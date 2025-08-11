@@ -24,8 +24,8 @@ export const GET = async () => {
 
     if (!company) {
       return NextResponse.json(
-        { message: "Company not found.", success: false },
-        { status: 404 }
+        { message: "Company not found.", success: true },
+        { status: 200 }
       );
     }
 

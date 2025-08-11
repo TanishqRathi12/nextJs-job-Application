@@ -1,66 +1,58 @@
 "use client";
-import CompanyLoader from "@/components/loader";
+import CommonError from "@/components/commonError";
+import CommonLoader from "@/components/commonLoader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useJobContext } from "@/context/compnay";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type Company = {
-  id: string;
-  name: string;
-  logo: string;
-  description: string;
+  company: {
+    id: string;
+    name: string;
+    logo: string;
+    description: string;
+    reviews: {
+      id: string;
+      rating: number;
+      comment: string;
+      createdAt: string;
+    }[];
+  };
 };
 
-type Review = {
-  id: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-};
-export const Page = () => {
-  const [company, setCompany] = useState<Company | null>(null);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
+export const Page = ({
+  isError,
+  data,
+  isLoading,
+}: {
+  isError: boolean;
+  data: Company;
+  isLoading: boolean;
+}) => {
   const [showAllReviews, setShowAllReviews] = useState(false);
-  const { setJobCreated } = useJobContext();
 
-  useEffect(() => {
-    const fetchCompany = async () => {
-      try {
-        const res = await fetch(`/api/getCompany`);
-        const data = await res.json();
-
-        if (data.company) {
-          setJobCreated(true);
-          setCompany(data.company);
-          setReviews(data.reviews || []);
-        } else {
-          setCompany(null);
-        }
-      } catch{
-        setCompany(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCompany();
-  }, [setJobCreated]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center">
-        <CompanyLoader />
+        <CommonLoader />
       </div>
     );
   }
 
-  if (!company) {
+  if (isError) {
     return (
-      <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 mt-6">
+      <div className="flex justify-center">
+        <CommonError />
+      </div>
+    );
+  }
+
+  if (!isError && !data.company) {
+    return (
+      <div className="w-full max-w-4xl mx-auto p-4 sm:px-6 mt-6">
         <Card>
           <CardContent className="pt-6">
             <div className="text-center py-8">
@@ -82,7 +74,9 @@ export const Page = () => {
     );
   }
 
-  const visibleReviews = showAllReviews ? reviews : reviews.slice(0, 3);
+  const visibleReviews = showAllReviews
+    ? data.company.reviews
+    : data.company.reviews.slice(0, 3);
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 mt-6">
@@ -90,16 +84,16 @@ export const Page = () => {
         <CardHeader className="pb-2">
           <div className="flex items-center gap-4">
             <Image
-              src={company.logo}
-              alt={company.name}
+              src={data.company.logo}
+              alt={data.company.name}
               width={60}
               height={60}
               className="rounded-md object-cover"
             />
             <div className="flex-1">
-              <h2 className="text-xl font-bold">{company.name}</h2>
+              <h2 className="text-xl font-bold">{data.company.name}</h2>
               <p className="text-sm text-muted-foreground flex flex-wrap">
-                {company.description}
+                {data.company.description}
               </p>
             </div>
           </div>
@@ -122,7 +116,7 @@ export const Page = () => {
           <Separator className="my-4" />
           <h3 className="text-lg font-semibold mb-2">Reviews</h3>
 
-          {reviews.length > 0 ? (
+          {data.company.reviews.length > 0 ? (
             <>
               {visibleReviews.map((review) => (
                 <div key={review.id} className="mb-4">
@@ -136,7 +130,7 @@ export const Page = () => {
                   <Separator className="my-2" />
                 </div>
               ))}
-              {reviews.length > 3 && (
+              {data.company.reviews.length > 3 && (
                 <div className="text-center mt-4">
                   <Button
                     variant="outline"
@@ -154,6 +148,6 @@ export const Page = () => {
       </Card>
     </div>
   );
-}
+};
 
 export default Page;

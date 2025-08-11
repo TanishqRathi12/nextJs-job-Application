@@ -16,7 +16,6 @@ export const GET = async () => {
         job_salary: true,
       },
     });
-    console.log(jobs)
     return NextResponse.json({
       success: true,
       jobs,

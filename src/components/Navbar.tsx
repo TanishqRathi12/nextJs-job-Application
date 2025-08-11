@@ -28,7 +28,7 @@ const Navbar = () => {
               type="text"
               id="search"
               name="title"
-              placeholder="Search jobs, companies, locations..."
+              placeholder="Search jobs..."
               className="w-full border-2 border-gray-300 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none p-2 sm:p-3 rounded-xl text-sm sm:text-base transition-all duration-200 shadow-sm"
             />
             <button
