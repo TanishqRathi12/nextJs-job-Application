@@ -2,6 +2,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./ui/button";
+import gqlClient from "@/services/gql";
+import { LOGIN } from "@/gql/queries";
 
 const GuestButton = () => {
   const [loading, setLoading] = useState(false);
@@ -10,23 +12,16 @@ const GuestButton = () => {
   const handleGuestLogin = async () => {
     setLoading(true);
     try {
-      const data = await fetch(`/api/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: "guest@gmail.com",
-          password: "guest@12",
-        }),
-      });
-
-      const result = await data.json();
-      if (result.success) {
+      const data = (await gqlClient.request(LOGIN, {
+        email: "guest@gmail.com",
+        password: "guest@12",
+      })) as { login: { success: boolean; message?: string; status?: number } };
+      if (data.login.success) {
         router.push("/dashboard");
       } else {
         console.log("Guest login failed");
       }
-    } catch (error) {
-      console.log("Error logging in as guest", error);
+    } catch {
     } finally {
       setLoading(false);
     }

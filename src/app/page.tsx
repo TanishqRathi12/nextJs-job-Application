@@ -2,18 +2,18 @@ import { Briefcase, ChevronRight, Mail, MapPin, Phone, Play, Search, Star, Trend
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Job Dhoondo - Find Your Dream Job in 60 Seconds | AI-Powered Job Search',
+  title: 'CareerDock - Find Your Dream Job in 60 Seconds | AI-Powered Job Search',
   description: 'Connect with top employers and discover opportunities with AI-powered job matching. 50,000+ active jobs, 2M+ job seekers. Start your career journey today.',
   keywords: 'jobs, career, employment, job search, AI matching, remote jobs, hiring, recruitment',
   openGraph: {
-    title: 'Job Dhoondo - Your Dream Job Awaits',
+    title: 'CareerDock - Your Dream Job Awaits',
     description: 'AI-powered job matching platform with 50,000+ active jobs. Find your perfect career opportunity today.',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Job Dhoondo - Find Your Dream Job',
+    title: 'CareerDock - Find Your Dream Job',
     description: 'AI-powered job search platform with 50,000+ opportunities',
   },
   robots: {
@@ -34,7 +34,7 @@ const JobDhoondoLanding = () => {
     {
       name: "Rajesh Kumar",
       role: "Marketing Manager at StartupXYZ",
-      content: "Job Dhoondo's filters helped me find the perfect remote opportunity.",
+      content: "CareerDock's filters helped me find the perfect remote opportunity.",
       rating: 5,
       avatar: "RK"
     },
@@ -87,7 +87,7 @@ const JobDhoondoLanding = () => {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            "name": "Job Dhoondo",
+            "name": "CareerDock",
             "url": "https://jobdhoondo.com",
             "logo": "https://jobdhoondo.com/logo.png",
             "description": "AI-powered job search platform connecting job seekers with top employers",
@@ -121,7 +121,7 @@ const JobDhoondoLanding = () => {
                   <Briefcase className="w-6 h-6 text-white" />
                 </div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
-                  Job Dhoondo
+                  CareerDock
                 </h1>
               </div>
 
@@ -281,7 +281,7 @@ const JobDhoondoLanding = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-8 sm:mb-16">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
-                  Why Choose Job Dhoondo?
+                  Why Choose CareerDock?
                 </h2>
                 <p className="text-lg sm:text-xl text-gray-600">
                   Advanced features designed to accelerate your job search
@@ -316,7 +316,7 @@ const JobDhoondoLanding = () => {
                     <Briefcase className="w-5 h-5 text-white" />
                   </div>
                   <h3 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
-                    Job Dhoondo
+                    CareerDock
                   </h3>
                 </div>
                 <p className="text-gray-600 mb-6 text-sm sm:text-base">
@@ -394,7 +394,7 @@ const JobDhoondoLanding = () => {
             
             <div className="border-t border-gray-200 mt-8 sm:mt-12 pt-6 sm:pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
               <p className="text-gray-600 text-sm">
-                © 2025 Job Dhoondo. All rights reserved.
+                © 2025 CareerDock. All rights reserved.
               </p>
               <div className="flex flex-wrap justify-center sm:justify-end gap-4 sm:gap-6 text-sm text-gray-600">
                 <a href="/privacy-policy" className="hover:text-blue-600 transition-colors">Privacy Policy</a>

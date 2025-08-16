@@ -1,6 +1,7 @@
 "use client";
 import { MapPin } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
@@ -126,7 +127,7 @@ const Card = ({ item }: itemProp) => {
 
       <div className="flex items-center justify-between mt-4">
         <div className="flex items-center gap-1">
-          <img
+          <Image
             src={item.job_logo || getPlaceholderImage(item.job_publisher)}
             alt={item.job_publisher}
             width={500}

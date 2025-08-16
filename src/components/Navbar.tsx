@@ -10,7 +10,7 @@ const Navbar = () => {
       <Link href="/dashboard">
         <div className="mb-4 lg:mb-0">
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent drop-shadow-sm">
-            JOB DHOONDO.COM
+            CareerDock
           </h1>
         </div>
       </Link>

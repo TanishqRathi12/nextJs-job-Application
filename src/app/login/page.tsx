@@ -24,6 +24,8 @@ import {
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 import { FormEvent, useState } from "react";
+import gqlClient from "@/services/gql";
+import { LOGIN } from "@/gql/queries";
 
 const Page = () => {
   const [error, setError] = useState<string | null>(null);
@@ -40,19 +42,15 @@ const Page = () => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     try {
-      const data = await fetch(`api/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const result = await data.json();
-      console.log(result)
-      if (result.success) {
+      const data = await gqlClient.request(LOGIN, { email, password }) as { login: { success: boolean, message?: string, status?: number } };
+      console.log(data)
+      if (data.login.success) {
         router.push("/dashboard");
       } else {
-        setError(result.message || "Login failed, please try again.");
+        setError(data.login.message || "Login failed, please try again.");
       }
-    } catch{
+    } catch (error) {
+      console.log(error);
       setError("Network error. Please try again.");
     } finally {
       setIsLoading(false);
@@ -80,7 +78,7 @@ const Page = () => {
                   <Briefcase className="w-4 sm:w-5 h-4 sm:h-5 text-white" />
                 </div>
                 <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
-                  Job Dhoondo
+                  CareerDock
                 </h1>
               </div>
             </Link>
@@ -267,7 +265,7 @@ const Page = () => {
       <footer className="relative z-10 bg-white/80 backdrop-blur-lg border-t border-gray-100 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
-            <p>© 2025 Job Dhoondo. All rights reserved.</p>
+            <p>© 2025 CareerDock. All rights reserved.</p>
             <div className="flex gap-4 sm:gap-6">
               <Link
                 href="/help"

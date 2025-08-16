@@ -12,6 +12,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SIGNUP } from "@/gql/mutations";
+import gqlClient from "@/services/gql";
+import { calculatePasswordStrength } from "@/utils/password";
 import {
   AlertCircle,
   ArrowLeft,
@@ -36,15 +39,6 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const router = useRouter();
-
-  const calculatePasswordStrength = (password: string) => {
-    let strength = 0;
-    if (password.length >= 8) strength += 25;
-    if (/[a-z]/.test(password)) strength += 25;
-    if (/[A-Z]/.test(password)) strength += 25;
-    if (/[0-9]/.test(password) || /[^A-Za-z0-9]/.test(password)) strength += 25;
-    return strength;
-  };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const password = e.target.value;
@@ -75,17 +69,18 @@ const Page = () => {
     const password = formData.get("password") as string;
 
     try {
-      const data = await fetch(`api/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-      const result = await data.json();
+      const data = (await gqlClient.request(SIGNUP, {
+        name,
+        email,
+        password,
+      })) as {
+        signup: { success: boolean; message?: string; status?: number };
+      };
 
-      if (result.success) {
+      if (data.signup.success) {
         router.push("/dashboard");
       } else {
-        setError(result.message || "Signup failed, please try again.");
+        setError(data.signup.message || "Signup failed, please try again.");
       }
     } catch {
       setError("Network error. Please try again.");
@@ -115,7 +110,7 @@ const Page = () => {
                   <Briefcase className="w-4 sm:w-5 h-4 sm:h-5 text-white" />
                 </div>
                 <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
-                  Job Dhoondo
+                  CareerDock
                 </h1>
               </div>
             </Link>

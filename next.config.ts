@@ -3,14 +3,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "www.explorin.io",
-        pathname: "/assets/explorin-new-logo-CCL0znd9.png",
+        hostname: "*",
       },
     ],
   },

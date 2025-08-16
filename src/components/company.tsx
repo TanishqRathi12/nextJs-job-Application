@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import AddJobButton from "./addJobButton";
 
 type Company = {
   company: {
@@ -99,11 +100,7 @@ export const Page = ({
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 items-stretch sm:items-center mt-3">
-            <Link href="/addJob" className="w-full sm:w-fit">
-              <Button className="w-full sm:w-fit bg-primary text-white hover:bg-primary/90 cursor-pointer">
-                Create a job
-              </Button>
-            </Link>
+              <AddJobButton/>
             <Link href="/companyJobs" className="w-full sm:w-fit">
               <Button className="w-full sm:w-fit bg-gray-200 text-foreground hover:bg-gray-300 cursor-pointer">
                 View Company Jobs

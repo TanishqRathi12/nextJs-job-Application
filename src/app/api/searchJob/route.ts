@@ -3,64 +3,23 @@ import { prisma } from "../../../../prisma/client";
 
 interface SearchJobBody {
   title?: string;
-  job_location?: string;
-  job_is_remote?: boolean;
-  salary?: string | number;
-}
-
-interface JobWhereInput {
-  job_title?: {
-    contains: string;
-    mode: "insensitive";
-  };
-  job_location?: string;
-  job_is_remote?: boolean;
-  job_salary?: {
-    gte: number;
-  };
+  location?: string;
+  city?: string;
+  is_remote?: boolean;
 }
 
 export const POST = async (req: NextRequest) => {
   try {
     const body: SearchJobBody = await req.json();
-
-    const andFilters = [] as Array<JobWhereInput>;
-
-    if (body.title?.trim()) {
-      andFilters.push({
-        job_title: {
-          contains: body.title,
-          mode: "insensitive",
-        },
-      });
-    }
-
-    if (body.job_location?.trim()) {
-      andFilters.push({
-        job_location: body.job_location,
-      });
-    }
-
-    if (typeof body.job_is_remote === "boolean") {
-      andFilters.push({
-        job_is_remote: body.job_is_remote,
-      });
-    }
-
-    if (body.salary) {
-      const salaryNumber = typeof body.salary === "string" ? parseInt(body.salary) : body.salary;
-      if (!isNaN(salaryNumber)) {
-        andFilters.push({
-          job_salary: {
-            gte: salaryNumber,
-          },
-        });
-      }
-    }
-    const whereClause = andFilters.length > 0 ? { AND: andFilters } : {};
-
     const jobs = await prisma.job.findMany({
-      where: whereClause,
+      where: {
+        OR: [
+          { job_title: { contains: body.title, mode: "insensitive" } },
+          { job_location: { contains: body.location, mode: "insensitive" } },
+          { job_city: { contains: body.city, mode: "insensitive" } },
+          { job_is_remote: { equals: body.is_remote } },
+        ],
+      },
       select: {
         id: true,
         job_title: true,
@@ -72,7 +31,11 @@ export const POST = async (req: NextRequest) => {
         job_city: true,
         job_salary: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
+
     return NextResponse.json({ success: true, jobs });
   } catch {
     return NextResponse.json(

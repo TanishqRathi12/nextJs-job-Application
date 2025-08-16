@@ -1,5 +1,6 @@
 "use client";
 
+import Company from "@/components/company";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -12,27 +13,26 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Company from "@/components/company";
 import { Textarea } from "@/components/ui/textarea";
 
-import { Separator } from "@/components/ui/separator";
 import CommonError from "@/components/commonError";
 import CommonLoader from "@/components/commonLoader";
+import { Separator } from "@/components/ui/separator";
 import { useQuery } from "@tanstack/react-query";
+import {
+  AlertTriangle,
+  Building2,
+  CheckCircle,
+  Edit3,
+  ExternalLink,
+  FileText,
+  Image,
+  Plus,
+  Settings,
+  Trash2
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { 
-  Building2, 
-  Settings, 
-  Plus, 
-  Edit3, 
-  Trash2, 
-  AlertTriangle,
-  CheckCircle,
-  Image,
-  FileText,
-  ExternalLink
-} from "lucide-react";
 
 
 export default function CreateCompanyForm() {
@@ -45,6 +45,8 @@ export default function CreateCompanyForm() {
     description: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -79,6 +81,8 @@ export default function CreateCompanyForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setIsSubmitting(true);
+    setSuccessMessage("");
 
     const res = await fetch(`/api/createCompany`, {
       method: "POST",
@@ -89,8 +93,10 @@ export default function CreateCompanyForm() {
     });
 
     if (res.ok) {
-      router.refresh();
-      router.push("/dashboard");
+      setSuccessMessage("Company created successfully!");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     } else {
       try {
         const data = await res.json();
@@ -99,6 +105,7 @@ export default function CreateCompanyForm() {
         setError("Something went wrong.");
       }
     }
+    setIsSubmitting(false);
   };
 
   if (isLoading) {
@@ -309,6 +316,15 @@ export default function CreateCompanyForm() {
                       </div>
                     )}
 
+                    {successMessage && (
+                      <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-600" />
+                          <p className="text-green-800 font-medium text-sm">{successMessage}</p>
+                        </div>
+                      </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="grid md:grid-cols-2 gap-6">
                         <div className="space-y-2">
@@ -373,11 +389,18 @@ export default function CreateCompanyForm() {
 
                       <Button 
                         type="submit" 
-                        className="w-full h-14 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg"
+                        disabled={isSubmitting}
+                        className={`w-full h-14 bg-gradient-to-r ${isSubmitting ? "hover:cursor-not-allowed" : "cursor-pointer"} from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg disabled:opacity-70 disabled:cursor-not-allowed`}
                       >
-                        <Plus className="h-5 w-5 mr-2" />
-                        Create Company Profile
-                        <ExternalLink className="h-4 w-4 ml-2" />
+                        {isSubmitting ? (
+                          <CommonLoader />
+                        ) : (
+                          <>
+                            <Plus className="h-5 w-5 mr-2" />
+                            Create Company Profile
+                            <ExternalLink className="h-4 w-4 ml-2" />
+                          </>
+                        )}
                       </Button>
                     </form>
                   </CardContent>
