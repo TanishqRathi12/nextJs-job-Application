@@ -74,8 +74,13 @@ export default function CreateCompanyForm() {
   });
 
   const handleDelete = async () => {
-    await fetch(`/api/deleteCompany`, { method: "DELETE" });
-    router.push("/dashboard");
+    try {
+      await fetch(`/api/deleteCompany`, { method: "DELETE" });
+      router.push("/dashboard");
+      
+    } catch (error) {
+      console.error("Failed to delete company:", error);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
