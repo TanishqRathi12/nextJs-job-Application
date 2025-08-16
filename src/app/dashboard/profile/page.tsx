@@ -77,7 +77,7 @@ export default function CreateCompanyForm() {
     try {
       await fetch(`/api/deleteCompany`, { method: "DELETE" });
       router.push("/dashboard");
-      
+      window.location.reload();
     } catch (error) {
       console.error("Failed to delete company:", error);
     }

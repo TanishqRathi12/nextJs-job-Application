@@ -40,7 +40,8 @@ export const DELETE = async () => {
       { message: "Company deleted successfully.", success: true },
       { status: 200 }
     );
-  } catch {
+  } catch(err) {
+    console.error("Error deleting company:", err);
     return NextResponse.json(
       { message: "Internal server error.", success: false },
       { status: 500 }

@@ -41,7 +41,7 @@ model Company {
   user_id     String   @unique @db.Uuid
   user        User     @relation(fields: [user_id], references: [id])
   reviews     Review[]
-  Jobs        Job[]
+  Jobs        Job[]    
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -53,7 +53,7 @@ model Application {
   user_id   String   @db.Uuid
   user      User     @relation(fields: [user_id], references: [id])
   job_id    String   @db.Uuid
-  job       Job      @relation(fields: [job_id], references: [id])
+  job       Job      @relation(fields: [job_id], references: [id], onDelete: Cascade)
   status    String   @default("pending")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
