@@ -3,6 +3,7 @@
 import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 type Review = {
   id: number;
@@ -21,33 +22,36 @@ export default function CompanyReviewSection({
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [applyLoading, setApplyLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchReviews = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetch(`/api/getReview`, {
-          method: "POST",
-          body: JSON.stringify(companyId),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await res.json();
-        setReviews(data.reviews || []);
-      } catch (error) {
-        console.error("Failed to fetch reviews:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchReviews = async () => {
+    try {
+      const res = await fetch(`/api/getReview`, {
+        method: "POST",
+        body: JSON.stringify(companyId),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return res.json();
+    } catch (error) {
+      console.error("Failed to fetch reviews:", error);
+    }
+  };
 
-    fetchReviews();
-  }, [companyId]);
+  const { isLoading, data } = useQuery({
+    queryKey: ["reviews", companyId],
+    queryFn: fetchReviews,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setReviews(data?.reviews || []);
+    }
+  }, [data]);
 
   const handleApply = async (jobId: string) => {
     try {
@@ -94,7 +98,7 @@ export default function CompanyReviewSection({
         };
 
         setReviews((prev) => [newReview, ...prev]);
-        setMessage("Review submitted successfully!");
+        setMessage("Review submitted successfully!,your feedback will reflect globally in 5 minutes");
         setComment("");
         setRating(5);
         setIsOpen(false);
