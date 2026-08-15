@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: career-dock
+spec:
+  replicas: 2
+  # revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: career-dock-node   # it finds the pod with this label and forwards the request to that pod
+  template:
+    metadata:
+      labels:
+        app: career-dock-node  # if you change this label, you also need to change the selector in the Service definition to match this new label.
+    spec:
+      containers:
+        - name: career-container
+          image: tanishqrathi/test-1:01-01-01
+          ports:
+            - containerPort: 3000  # This is the port on which the container is listening. It should match the targetPort defined in the Service.
+            # if want to make multiple containers in a single pod, you can add more container definitions here like you describe above.

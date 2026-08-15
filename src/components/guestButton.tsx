@@ -1,15 +1,16 @@
 "use client";
+import { LOGIN } from "@/gql/queries";
+import gqlClient from "@/services/gql";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import gqlClient from "@/services/gql";
-import { LOGIN } from "@/gql/queries";
 
 const GuestButton = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleGuestLogin = async () => {
+    console.log("Guest login initiated");
     setLoading(true);
     try {
       const data = (await gqlClient.request(LOGIN, {
@@ -21,7 +22,8 @@ const GuestButton = () => {
       } else {
         console.log("Guest login failed");
       }
-    } catch {
+    } catch (error) {
+      console.error("Guest login error:", error);
     } finally {
       setLoading(false);
     }
