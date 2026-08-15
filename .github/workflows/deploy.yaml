@@ -20,4 +20,4 @@ jobs:
                   script: |
                       cd /home/ec2-user/nextJs-job-Application
                       git pull origin main
-                      sudo docker-compose up -d
+                      sudo docker-compose up -d --build
